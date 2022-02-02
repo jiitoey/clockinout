@@ -42,11 +42,15 @@ const execute = async () => {
     "#form-container > div > div > div.office-form-content.office-form-page-padding > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-navigation-container > div.office-form-button-container > button"
   );
 
-  console.log("4. Click WFH");
   const wfhBtn =
     "#form-container > div > div > div.office-form-content.office-form-page-padding > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div.__question__.office-form-question > div > div.office-form-question-element > div > div:nth-child(8) > div > label";
-  await page.waitForSelector(wfhBtn);
-  await page.click(wfhBtn);
+  const headofficeBtn =
+    "#form-container > div > div > div.office-form-content.office-form-page-padding > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div.__question__.office-form-question > div > div.office-form-question-element > div > div:nth-child(1) > div > label";
+  const wfhOrOffice = process.env.WFH_OR_OFFICE;
+  const workPlaceBtn = wfhOrOffice == "WFH" ? wfhBtn : headofficeBtn;
+  console.log("4. Click", wfhOrOffice);
+  await page.waitForSelector(workPlaceBtn);
+  await page.click(workPlaceBtn);
 
   console.log("5. Click Send me an email");
   await page.click(
@@ -64,11 +68,25 @@ const execute = async () => {
 };
 
 (async () => {
-  const executeTimeStr = process.env.EXECUTE_TIME;
   const now = new Date();
-  const executeTime = new Date(executeTimeStr);
+  let executeTime = new Date(
+    `${now.toISOString().split("T")[0]}T00:${getRandomInt(
+      50,
+      55
+    )}:${getRandomInt(10, 59)}.000Z`
+  );
+  if (now > executeTime)
+    executeTime.setTime(executeTime.getTime() + 24 * 60 * 60 * 1000);
+
+  console.log("executeTime", executeTime);
   const timeUntilExecute = executeTime.getTime() - now.getTime();
   console.log(`timeUntilExecute ${timeUntilExecute / 1000 / 60} mins`);
 
   setTimeout(execute, timeUntilExecute);
 })();
+
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
