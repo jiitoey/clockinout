@@ -8,6 +8,8 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+let workplace = null;
+
 const clockin = async () => {
   const now = new Date();
   //   let executeTime = now;
@@ -19,6 +21,18 @@ const clockin = async () => {
   );
   if (now > executeTime)
     executeTime.setTime(executeTime.getTime() + 24 * 60 * 60 * 1000);
+
+  let date = executeTime.getDate();
+  const notExcuteDates = process.env.NOT_EXECUTE_DATES.split(",").map((d) =>
+    parseInt(d)
+  );
+
+  while (notExcuteDates.includes(date)) {
+    executeTime.setTime(executeTime.getTime() + 24 * 60 * 60 * 1000);
+    date = executeTime.getDate();
+  }
+  workplace =
+    executeTime.getDay() == 1 || executeTime.getDay() == 5 ? "OFFICE" : "WFH";
 
   console.log("executeTime", executeTime);
   const timeUntilExecute = executeTime.getTime() - now.getTime();
@@ -89,9 +103,8 @@ const executeClockin = async () => {
     "#form-container > div > div > div.office-form-content.office-form-page-padding > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div.__question__.office-form-question > div > div.office-form-question-element > div > div:nth-child(8) > div > label";
   const headofficeBtn =
     "#form-container > div > div > div.office-form-content.office-form-page-padding > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div.__question__.office-form-question > div > div.office-form-question-element > div > div:nth-child(1) > div > label";
-  const wfhOrOffice = process.env.WFH_OR_OFFICE;
-  const workPlaceBtn = wfhOrOffice == "WFH" ? wfhBtn : headofficeBtn;
-  console.log("4. Click", wfhOrOffice);
+  const workPlaceBtn = workplace == "WFH" ? wfhBtn : headofficeBtn;
+  console.log("4. Click", workplace);
   await page.waitForSelector(workPlaceBtn);
   await page.click(workPlaceBtn);
 
