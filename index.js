@@ -34,7 +34,7 @@ const clockin = async () => {
   workplace =
     executeTime.getDay() == 1 || executeTime.getDay() == 5 ? "OFFICE" : "WFH";
 
-  console.log("executeTime", executeTime);
+  console.log("executeTime", executeTime.toString());
   const timeUntilExecute = executeTime.getTime() - now.getTime();
   console.log(`timeUntilExecute ${timeUntilExecute / 1000 / 60} mins`);
 
@@ -53,7 +53,7 @@ const clockout = async () => {
   if (now > executeTime)
     executeTime.setTime(executeTime.getTime() + 24 * 60 * 60 * 1000);
 
-  console.log("executeTime", executeTime);
+  console.log("executeTime", executeTime.toString());
   const timeUntilExecute = executeTime.getTime() - now.getTime();
   console.log(`timeUntilExecute ${timeUntilExecute / 1000 / 60} mins`);
 

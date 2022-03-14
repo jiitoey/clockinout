@@ -75,7 +75,7 @@ const execute = async () => {
   if (now > executeTime)
     executeTime.setTime(executeTime.getTime() + 24 * 60 * 60 * 1000);
 
-  console.log("executeTime", executeTime);
+  console.log("executeTime", executeTime.toString());
   const timeUntilExecute = executeTime.getTime() - now.getTime();
   console.log(`timeUntilExecute ${timeUntilExecute / 1000 / 60} mins`);
 
