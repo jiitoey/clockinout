@@ -57,18 +57,21 @@ const execute = async () => {
     "#form-container > div > div > div.office-form-content.office-form-page-padding > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-email-receipt-checkbox > div > div > label > span"
   );
 
-  console.log("6. Click Submit");
-  await page.click(
-    "#form-container > div > div > div.office-form-content.office-form-page-padding > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-navigation-container > div.office-form-button-container > button.office-form-theme-primary-background.office-form-theme-button.office-form-bottom-button.button-control.light-background-button.__submit-button__"
-  );
+  setTimeout(async () => {
+    console.log("6. Click Submit");
+    await page.click(
+      "#form-container > div > div > div.office-form-content.office-form-page-padding > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-navigation-container > div.office-form-button-container > button.office-form-theme-primary-background.office-form-theme-button.office-form-bottom-button.button-control.light-background-button.__submit-button__"
+    );
+    // await page.screenshot({ path: "result/clockin.png" });
+    await browser.close();
 
-  // await page.screenshot({ path: "result/clockin.png" });
-
-  await browser.close();
+    await clockout();
+  }, getRandomInt(4000, 6000));
 };
 
 (async () => {
   const now = new Date();
+  // let executeTime = now;
   let executeTime = new Date(
     `${now.toISOString().split("T")[0]}T00:${getRandomInt(
       50,
