@@ -53,22 +53,39 @@ const execute = async () => {
     "#form-container > div > div > div.office-form-content.office-form-page-padding > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-email-receipt-checkbox > div > div > label > span"
   );
 
-  console.log("6. Click Submit");
-  await page.click(
-    "#form-container > div > div > div.office-form-content.office-form-page-padding > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-navigation-container > div.office-form-button-container > button.office-form-theme-primary-background.office-form-theme-button.office-form-bottom-button.button-control.light-background-button.__submit-button__"
-  );
-
-  // await page.screenshot({ path: "result/clockout.png" });
-
-  await browser.close();
+  setTimeout(async () => {
+    console.log("6. Click Submit");
+    await page.click(
+      "#form-container > div > div > div.office-form-content.office-form-page-padding > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-navigation-container > div.office-form-button-container > button.office-form-theme-primary-background.office-form-theme-button.office-form-bottom-button.button-control.light-background-button.__submit-button__"
+    );
+    // await page.screenshot({ path: "result/clockout.png" });
+    await browser.close();
+  }, getRandomInt(4000, 6000));
 };
 
-(async () => {
-  const executeTimeStr = process.env.EXECUTE_TIME;
+const clockout = async () => {
   const now = new Date();
-  const executeTime = new Date(executeTimeStr);
+  // let executeTime = now;
+  let executeTime = new Date(
+    `${now.toISOString().split("T")[0]}T10:0${getRandomInt(
+      1,
+      5
+    )}:${getRandomInt(10, 59)}.000Z`
+  );
+  if (now > executeTime)
+    executeTime.setTime(executeTime.getTime() + 24 * 60 * 60 * 1000);
+
+  console.log("executeTime", executeTime);
   const timeUntilExecute = executeTime.getTime() - now.getTime();
   console.log(`timeUntilExecute ${timeUntilExecute / 1000 / 60} mins`);
 
   setTimeout(execute, timeUntilExecute);
-})();
+};
+
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+module.exports = { clockout };
