@@ -120,6 +120,7 @@ const executeClockin = async () => {
     );
     // await page.screenshot({ path: "result/clockin.png" });
     await browser.close();
+    console.log("\n");
 
     await clockout();
   }, getRandomInt(4000, 6000));
@@ -182,6 +183,8 @@ const executeClockout = async () => {
     );
     // await page.screenshot({ path: "result/clockout.png" });
     await browser.close();
+    console.log("\n");
+
     await clockin();
   }, getRandomInt(4000, 6000));
 };
